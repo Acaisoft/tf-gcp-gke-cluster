@@ -1,3 +1,14 @@
+terraform {
+  # The configuration for this backend will be filled in by Terragrunt
+  backend "gcs" {}
+}
+
+provider "google" {
+  credentials = "${file(var.provider["credentials_path"])}"
+  region      = "${var.provider["region"]}"
+  project     = "${var.provider["project"]}"
+}
+
 locals {
   name_prefix = "${var.general["name"]}-${var.general["env"]}"
 }
@@ -16,8 +27,7 @@ data "google_container_engine_versions" "region" {
 # https://www.terraform.io/docs/providers/google/r/container_node_pool.html
 resource "google_container_node_pool" "new_container_cluster_node_pool" {
   count = "${length(var.node_pool)}"
-
-  name       = "${local.name_prefix}-${var.general["zone"]}-pool-${count.index}"
+  name       = "${local.name_prefix}-pool-${count.index}"
   zone       = "${var.general["zone"]}"
   node_count = "${lookup(var.node_pool[count.index], "node_count", 3)}"
   cluster    = "${google_container_cluster.new_container_cluster.name}"
@@ -51,7 +61,7 @@ resource "google_container_node_pool" "new_container_cluster_node_pool" {
 # Creates a Google Kubernetes Engine (GKE) cluster
 # https://www.terraform.io/docs/providers/google/r/container_cluster.html
 resource "google_container_cluster" "new_container_cluster" {
-  name        = "${local.name_prefix}-${var.general["zone"]}-master"
+  name        = "${local.name_prefix}-master"
   description = "Kubernetes ${var.general["name"]} in ${var.general["zone"]}"
   zone        = "${var.general["zone"]}"
   # region - Conflict zone

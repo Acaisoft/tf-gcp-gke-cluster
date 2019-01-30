@@ -2,6 +2,15 @@
 
 Compatible provider `1.19.1` (**stable**)
 
+This fork provides an ability to use this module with terragrunt. 
+
+## Requirements 
+
+To use this module with terragrunt you need to:
+- crate google service account and provide file with key 
+- crate google bucket for storing state proposes
+
+
 ## Examples
 
 * 1 cluster, 1 default node pool (2 nodes (10GB/node) n1-standard-1), latest version of Kubernetes for each node,

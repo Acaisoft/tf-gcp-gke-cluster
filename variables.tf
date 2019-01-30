@@ -9,6 +9,15 @@
 ##########################
 
 # Parameters authorized:
+# credentials_path (mandatory)
+# project (mandatory)
+# region (mandatory)
+variable "provider" {
+  type        = "map"
+  description = "Google provider parameters"
+}
+
+# Parameters authorized:
 # name (mandatory)
 # zone (mandatory)
 # env (mandatory)
