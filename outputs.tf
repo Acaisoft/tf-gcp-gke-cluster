@@ -42,3 +42,8 @@ output "gcr_url" {
   value       = "${data.google_container_registry_repository.registry.repository_url}"
   description = "This data source fetches the project name, and provides the appropriate URLs to use for container registry for this project"
 }
+
+output "tiller_service_account" {
+  value       = "${kubernetes_cluster_role_binding.tiller.metadata.0.name}"
+  description = "Service account name for use with helm"
+}
