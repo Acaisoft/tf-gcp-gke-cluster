@@ -21,8 +21,6 @@ terragrunt = {
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider = {
-  # Path to file with GCP service account key 
-  credentials_path = "./service-account.json"
   # GCS project name
   project          = "project-name"
   region           = "europe-west1"

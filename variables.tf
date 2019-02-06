@@ -9,7 +9,6 @@
 ##########################
 
 # Parameters authorized:
-# credentials_path (mandatory)
 # project (mandatory)
 # region (mandatory)
 variable "provider" {

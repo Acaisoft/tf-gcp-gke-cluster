@@ -4,7 +4,6 @@ terraform {
 }
 
 provider "google" {
-  credentials = "${file(var.provider["credentials_path"])}"
   region      = "${var.provider["region"]}"
   project     = "${var.provider["project"]}"
 }
