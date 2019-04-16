@@ -45,6 +45,7 @@ resource "kubernetes_cluster_role_binding" "tiller" {
 
 locals {
   name_prefix = "${var.general["name"]}-${var.general["env"]}"
+  empty_object = {}
 }
 
 # This data source fetches the project name, and provides the appropriate URLs to use for container registry for this project.
@@ -61,7 +62,7 @@ data "google_container_engine_versions" "region" {
 # https://www.terraform.io/docs/providers/google/r/container_node_pool.html
 resource "google_container_node_pool" "new_container_cluster_node_pool" {
   count = "${length(var.node_pool)}"
-  name       = "${local.name_prefix}-pool-${count.index}"
+  name       = "${lookup(var.node_pool[count.index], "name", "${local.name_prefix}-pool-${count.index}")}"
   zone       = "${var.general["zone"]}"
   node_count = "${lookup(var.node_pool[count.index], "node_count", 3)}"
   cluster    = "${google_container_cluster.new_container_cluster.name}"
@@ -76,7 +77,9 @@ resource "google_container_node_pool" "new_container_cluster_node_pool" {
     oauth_scopes    = "${split(",", lookup(var.node_pool[count.index], "oauth_scopes", "https://www.googleapis.com/auth/compute,https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring"))}"
     preemptible     = "${lookup(var.node_pool[count.index], "preemptible", false)}"
     service_account = "${lookup(var.node_pool[count.index], "service_account", "default")}"
-    labels          = "${var.labels}"
+    labels          = {
+      group = "${lookup(var.node_pool[count.index], "group_label", "default")}"
+    }
     tags            = "${var.tags}"
     metadata        = "${var.metadata}"
   }
